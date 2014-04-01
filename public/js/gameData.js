@@ -55,10 +55,16 @@ angular.module('gameData', [])
           if (!object || object === player){
             return;
           }
-          var d =  distance(object, player);
-          if (d  < 10000){
-            object.x = (center + d * Math.cos(dir + player.direction - object.direction) + data.scale) % data.scale;
-            object.y = (center + d * Math.sin(dir + player.direction - object.direction) + data.scale) % data.scale;
+
+          object.x = object.x - player.x;
+          object.y = object.y - player.y;
+
+          var d =  Math.pow(object.x*object.x + object.y + object.y, 1/2);
+
+          if (d  < data.scale){
+            var direction = Math.PI/2 + (player.direction + object.direction) % (Math.PI * 2);
+            object.x = center + d * Math.cos(-direction);
+            object.y = center + d * Math.sin(-direction);
             console.log(d, object.x, object.y, object);
             data.map.push(object);
           }
