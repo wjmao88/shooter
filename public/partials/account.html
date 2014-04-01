@@ -1,0 +1,36 @@
+<div class="account" ng-controller="AccountController">
+  <div>
+    <label for="username">Username:</label>
+    <input id="username" type="text" ng-model="username">
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input id="password" type="password" ng-model="password">
+  </div>
+  <div ng-show="!showLogin">
+    <label for="password">Confirm Password:</label>
+    <input id="confirmPassword" type="password" ng-model="confirmPassword">
+  </div>
+  <div ng-if="mismatchPassword()">
+    Passwords don't match
+  </div>
+  <div class="action-button">
+    <div ng-if="showLogin" ng-click="action()">
+      Login
+    </div>
+    <div  ng-if="!showLogin" ng-click="action()">
+      Signup
+    </div>
+  </div>
+  <div ng-if="errorInfo.hasError" ng-click="errorInfo.hasError = !hasError">
+    {{errorInfo.message}}
+  </div>
+  <div class="switch-button">
+    <div ng-if="!showLogin" ng-click="toggleLogin(true)">
+      Go login from existing account
+    </div>
+    <div ng-if="showLogin" ng-click="toggleLogin(false)">
+      Go create a new account
+    </div>
+  <div>
+</div>

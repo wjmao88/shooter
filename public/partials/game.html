@@ -1,0 +1,24 @@
+<svg
+  class="game"
+  ng-controller="GameControl"
+  ng-keydown="keydown"
+  height="{{data.scale}}"
+  width="{{data.scale}}"
+>
+  <g
+    ng-repeat="object in data.map"
+    class="screen-object {{object.type}}"
+  >
+    <circle
+      class="non-player"
+      r="{{object.radius}}"
+      cx="{{object.x}}"
+      cy="{{object.y}}"
+    >
+  </g>
+  <g
+    class="screen-object"
+  >
+    <circle class="player">
+  </g>
+</div>
