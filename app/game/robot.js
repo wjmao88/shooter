@@ -14,18 +14,18 @@ var moves = {
 var types = {
   'asteroid': {
     radius: 0.05,
-    speed: 0.0003,
-    move: 'drift'
-  },
-  'bullet': {
-    radius: 0.03,
-    speed: 0.003,
+    speed: 0.0006,
     move: 'drift'
   },
   'ship': {
     radius: 0.02,
-    speed: 0.001,
+    speed: 0.009,
     move: 'pilot'
+  },
+  'bullet': {
+    radius: 0.01,
+    speed: 0.018,
+    move: 'drift'
   }
 };
 

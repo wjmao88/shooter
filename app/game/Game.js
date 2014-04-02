@@ -8,17 +8,40 @@ var Game = function(){
 };
 
 Game.prototype.init = function(){
-  // for (var i=0; i < 3; i++){
-  //   this.addRobot(robotMethods.types()[0]);
-  //   this.addRobot(robotMethods.types()[1]);
-  // }
+  for (var i=0; i < 3; i++){
+    this.addRobot(robotMethods.types()[0]);
+    this.addRobot(robotMethods.types()[1]);
+  }
+};
+
+var collision = function(obj, target, index, map){
+  if(obj.type === 'bullet' && target.type !== 'bullet'){
+    map[index] = false;
+  } else if (obj.type === 'player'){
+    obj.score -= 1;
+  }
 };
 
 Game.prototype.turn = function(){
   var scale = this.scale;
-  this.map.forEach(function(robot){
+  var map = this.map;
+  map.forEach(function(robot, ri){
     if (robot){
       robotMethods.move(robot, scale);
+      map.forEach(function(target, ti){
+        if (!target || ri === ti){
+          return;
+        }
+        var dx = robot.x - target.x;
+        var dy = robot.y - target.y;
+        var d = Math.pow(dx*dx + dy*dy, 1/2);
+        //console.log(d, robot.type, robot.radius, target.type, target.radius);
+        if (d >= robot.radius + target.radius){
+          return;
+        }
+        collision(robot, target, ri, map);
+        collision(target, robot, ti, map);
+      });
     }
   });
 };
@@ -36,6 +59,7 @@ Game.prototype.addBullet = function(player){
   bullet.direction = player.direction;
   console.log(bullet);
   this.map[bullet.id] = bullet;
+  console.log(this.map);
 };
 
 Game.prototype.createPlayer = function(name){
@@ -43,17 +67,19 @@ Game.prototype.createPlayer = function(name){
   player.name = name;
   player.type = 'player';
   player.move = 'drift';
+  player.speed = 0.001 * this.scale;
+  player.score = 0;
   this.map[player.id] = player;
   return player;
 };
 
 
 var playerActions = {
-  'forward': function(player){
-    player.speed = 0.001;
+  'forward': function(player, game){
+    player.speed = 0.009 * game.scale;
   },
-  'stop': function(player){
-    player.speed = 0;
+  'stop': function(player, game){
+    player.speed = 0 * game.scale;
   },
   'left': function(player){
     player.direction -= Math.random() * Math.PI/32;
@@ -67,7 +93,6 @@ var playerActions = {
 };
 
 Game.prototype.playerAction = function(player, action){
-  console.log(action);
   playerActions[action.action](player, this);
 };
 

@@ -3,11 +3,13 @@ angular.module('gameData', [])
     '$http',
     '$location',
     '$rootScope',
-    function($http, $location, $rootScope){
+    'accountService',
+    function($http, $location, $rootScope, accountService){
       var data = {
         map: [],
         playerId: -1,
-        scale: 300
+        scale: 300,
+        player: {}
       };
       this.data = data;
 
@@ -37,41 +39,44 @@ angular.module('gameData', [])
         data.playerId = serverData.playerId;
       });
 
-      var distance = function(a, b){
-        return Math.pow(
-          Math.pow(a.x - b.x, 2) +
-          Math.pow(a.y - b.y, 2),
-          1/2
-        );
-      };
-      var player;
+
+
       on('updateMap', function(serverData){
         data.map.length = 0;
-        player = serverData.map[data.playerId];
+        data.player = serverData.map[data.playerId];
 
-        var center = data.scale/2;
-        var dir = 0 - Math.PI/2;
-        serverData.map.forEach(function(object){
-          if (!object || object === player){
+        var px = data.player.x;
+        var py = data.player.y;
+        var pd = data.player.direction;
+
+        var rotate = function(x1, y1, a1){
+          var dx = x1 - px;
+          var dy = y1 - py;
+          var da = a1 - pd;
+          var angle = Math.atan2(dy, dx) + (Math.PI/2 - pd);
+          x = dx * Math.cos(angle) - dy * Math.sin(angle);
+          y = dx * Math.sin(angle) + dy * Math.cos(angle);
+          return [x, y, da];
+        };
+
+        var origin = data.scale/2;
+
+        serverData.map.forEach(function(object, index){
+          if (!object){
             return;
           }
 
-          object.x = object.x - player.x;
-          object.y = object.y - player.y;
+          var offset = rotate(object.x, object.y, object.direction);
 
-          var d =  Math.pow(object.x*object.x + object.y + object.y, 1/2);
-
-          if (d  < data.scale){
-            var direction = Math.PI/2 + (player.direction + object.direction) % (Math.PI * 2);
-            object.x = center + d * Math.cos(-direction);
-            object.y = center + d * Math.sin(-direction);
-            console.log(d, object.x, object.y, object);
+          if ( true || offset[0] < origin && offset[0] > -origin &&
+               offset[1] < origin && offset[1] > -origin ){
+            object.x = origin + offset[0];
+            object.y = origin + offset[1];
+            object.direction = offset[2];
+            object.degree = object.direction * 180/Math.PI;
             data.map.push(object);
           }
         });
-        player.x = center;
-        player.y = center;
-        player.direction = dir;
       });
 
       this.playerAction = function(action){

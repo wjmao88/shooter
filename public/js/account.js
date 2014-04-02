@@ -19,11 +19,11 @@ angular.module('account', [])
     this.logout = function(){
       return $http({
         method: 'GET',
-        url: '/logout',
+        url: '/logout'
       })
       .success(function(data, status, headers, config){
         that.loggedIn = false;
-        $location.path('/');
+        $location.path('/accounts');
       });
     };
 

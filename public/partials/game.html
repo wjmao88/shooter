@@ -1,24 +1,44 @@
-<svg
-  class="game"
+<div
   ng-controller="GameControl"
-  ng-keydown="keydown"
-  height="{{data.scale}}"
-  width="{{data.scale}}"
 >
-  <g
-    ng-repeat="object in data.map"
-    class="screen-object {{object.type}}"
+  <div>
+    Score: {{data.player.score}}
+  </div>
+  <svg
+    class="game"
+    ng-keydown="keydown"
+    height="{{data.scale}}"
+    width="{{data.scale}}"
+    ng-clock
   >
-    <circle
-      class="non-player"
-      r="{{object.radius}}"
-      cx="{{object.x}}"
-      cy="{{object.y}}"
+    <g
+      ng-repeat="object in data.map"
+      class="screen-object {{object.type}} {{object.id===data.playerId? 'self':''}}"
+      transform="translate({{object.x}},{{object.y}})"
     >
-  </g>
-  <g
-    class="screen-object"
-  >
-    <circle class="player">
-  </g>
+      <circle ng-show="object.type !== 'player'"
+        class="{{object.type}}"
+        r="{{object.radius}}"
+        cx="0"
+        cy="0"
+      ></circle>
+      <rect ng-show="object.type === 'player'"
+        class="{{object.type}}"
+        points="0,0 {{object.radius}},0 {{object.radius}}/2,{{object.radius}}"
+        width="{{object.radius*2}}"
+        height="{{object.radius}}"
+        x="0"
+        y="0"
+        transform="rotate({{object.degree}} {{object.radius}} {{object.radius/2}})"
+      ></rect>
+    </g>
+  </svg>
+
+  <div>
+    <ul>
+      <li ng-repeat="object in data.map | orderBy: score:true" ng-if="object.score">
+        {{object.name}} : {{object.score}}
+      </li>
+    </ul>
+  <div>
 </div>

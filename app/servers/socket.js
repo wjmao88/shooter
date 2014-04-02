@@ -56,11 +56,12 @@ exports.listen = function(server, game){
     var player = game.createPlayer(playerName);
 
     socket.on('disconnect', function () {
-      clearInterval(intervalID);
+      game.map[player.id] = false;
     });
 
     socket.emit('connected', {
-      playerId: player.id
+      playerId: player.id,
+      scale: game.scale
     });
 
     socket.on('playerAction', function(action){

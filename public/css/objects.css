@@ -1,3 +1,16 @@
-/*.screen-object.asteroid circle {
-  fill: black;
-}*/
+.screen-object.asteroid circle {
+  fill: #999999;
+}
+
+.screen-object.ship circle {
+  fill: red;
+}
+
+.screen-object.bullet circle {
+  fill: blue;
+}
+
+.screen-object.self * {
+  stroke-width: 2px;
+  stroke: yellow;
+}
