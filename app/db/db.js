@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 var bluebird = require('bluebird');
 var mongoose = require('mongoose');
 //=========================================================
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/shortlydb');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/shootstufdb');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

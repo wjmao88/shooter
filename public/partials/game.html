@@ -24,12 +24,11 @@
       ></circle>
       <rect ng-show="object.type === 'player'"
         class="{{object.type}}"
-        points="0,0 {{object.radius}},0 {{object.radius}}/2,{{object.radius}}"
         width="{{object.radius*2}}"
         height="{{object.radius}}"
-        x="0"
-        y="0"
-        transform="rotate({{object.degree}} {{object.radius}} {{object.radius/2}})"
+        x="{{-object.radius/4}}"
+        y="{{-object.radius/2}}"
+        transform="rotate({{object.degree}} 0 0)"
       ></rect>
     </g>
   </svg>

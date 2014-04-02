@@ -3,7 +3,7 @@ var robotMethods = require('./robot.js');
 //=========================================================
 var Game = function(){
   this.map = [];
-  this.scale = 300;
+  this.scale = 1000;
   this.init();
 };
 
